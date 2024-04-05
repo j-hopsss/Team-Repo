@@ -30,14 +30,10 @@ def calculate():
     
     # Calculate BMR (Basal Metabolic Rate) using Harris-Benedict equation
     if gender == 'M':
-        bmr = (10 * weight_lbs) + (6.25 * height_inches) - (5 * 25) + 5
+        bmr = round((10 * weight_lbs) + (6.25 * height_inches) - (5 * 25) + 5)
     else:  # Female
-        bmr = (10 * weight_lbs) + (6.25 * height_inches) - (5 * 25) - 161
+        bmr = round((10 * weight_lbs) + (6.25 * height_inches) - (5 * 25) - 161)
 
-    # Calculate BMR (Basal Metabolic Rate) using Harris-Benedict equation
-    # BMR formula: (10 * weight in kg) + (6.25 * height in cm) - (5 * age in years) + s
-    # s = 5 for males, -161 for females
-    bmr = round((10 * weight_lbs) + (6.25 * height_inches) - (5 * 25) + 5)
 
     # Calculate TDEE (Total Daily Energy Expenditure)
     # Assuming a sedentary lifestyle for simplicity
