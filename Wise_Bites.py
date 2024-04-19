@@ -1,6 +1,6 @@
-# app.py
+# Wise_Bites
 from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 
 app = Flask(__name__)
 
@@ -33,7 +33,7 @@ def login():
             user = User()
             user.id = username
             login_user(user)
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('home'))
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -60,7 +60,8 @@ def logout():
 # Calculator routes
 @app.route('/')
 def home():
-    return render_template('home.html')
+    logged_in = current_user.is_authenticated  # Check if user is logged in
+    return render_template('home.html', logged_in=logged_in)
 
 @app.route('/calculator', methods=['GET', 'POST'])
 def calculate():
@@ -124,5 +125,4 @@ def calculate():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
 
