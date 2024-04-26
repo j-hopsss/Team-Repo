@@ -1,4 +1,5 @@
-# Wise_Bites
+# app.py
+
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 
@@ -67,12 +68,12 @@ def home():
 def calculate():
     if request.method == 'POST':
         name = request.form['name']
-        gender = request.form['gender']
         weight_lbs = float(request.form['weight_lbs'])
         height_ft = int(request.form['height_ft'])
         height_in = int(request.form['height_in'])
         target_weight = float(request.form['target_weight'])
-        weekly_loss = float(request.form['weekly_loss'])
+        weekly_change = float(request.form['weekly_change'])
+        gender = request.form['gender']
         
         # Reset result variables
         result_line_1 = None
@@ -96,18 +97,18 @@ def calculate():
         tdee = round(bmr * 1.2)
 
         # Calculate the recommended calorie intake per day to achieve the target weight
-        # Adjust the caloric deficit based on the desired weekly weight loss (1-3 lbs)
-        caloric_deficit_per_day = weekly_loss * 500  # Aim for a 500-calorie deficit per day for each pound of weight loss per week
-        target_calories = round(tdee - caloric_deficit_per_day)
+        # Adjust the caloric deficit or surplus based on the desired weekly weight change
+        caloric_change_per_day = weekly_change * 500  # Aim for a 500-calorie change per day for each pound of weight change per week
+        target_calories = round(tdee + caloric_change_per_day)
 
         # Estimate the number of weeks it should take to reach the target weight
-        weeks_to_reach_target_weight = round((weight_lbs - target_weight) / weekly_loss)
+        weeks_to_reach_target_weight = round((target_weight - weight_lbs) / weekly_change)
 
         # Prepare result lines
         result_line_1 = f"1. Estimated BMR (Basal Metabolic Rate): {bmr} calories/day"
         result_line_2 = f"2. Estimated TDEE (Total Daily Energy Expenditure): {tdee} calories/day"
         result_line_3 = f"3. Target Weight: {target_weight} lbs"
-        result_line_4 = f"4. Weekly Weight Loss Goal: {weekly_loss} lbs"
+        result_line_4 = f"4. Desired Weekly Weight Change: {weekly_change} lbs"
         result_line_5 = f"5. Recommended Daily Calorie Intake: {target_calories} calories"
         result_line_6 = f"6. Estimated Time to Reach Target Weight: {weeks_to_reach_target_weight} weeks"
 
@@ -121,8 +122,8 @@ def calculate():
                                 result_line_5=result_line_5,
                                 result_line_6=result_line_6)
     else:
+        # If it's a GET request, just render the calculator template without processing form data
         return render_template('calculator.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
-
