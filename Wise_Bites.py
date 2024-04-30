@@ -1,6 +1,4 @@
-# app.py
-
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 
 app = Flask(__name__)
@@ -34,7 +32,10 @@ def login():
             user = User()
             user.id = username
             login_user(user)
-            return redirect(url_for('home'))
+            return redirect(url_for('redirect_user'))
+        else:
+            error = "Invalid username or password. Please try again."
+            return render_template('login.html', error=error)
     return render_template('login.html')
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -45,6 +46,9 @@ def signup():
         if username not in users:
             users[username] = {'username': username, 'password': password}
             return redirect(url_for('login'))
+        else:
+            error = "Username already exists. Please choose a different username."
+            return render_template('signup.html', error=error)
     return render_template('signup.html')
 
 @app.route('/dashboard')
@@ -58,13 +62,20 @@ def logout():
     logout_user()
     return redirect(url_for('login'))
 
-# Calculator routes
+# Redirect user based on their login status and actions
+# Redirect user to the homepage
 @app.route('/')
-def home():
-    logged_in = current_user.is_authenticated  # Check if user is logged in
-    return render_template('home.html', logged_in=logged_in)
+def redirect_user():
+    return redirect(url_for('home'))
 
+# Homepage route
+@app.route('/home')
+def home():
+    return render_template('home.html', logged_in=current_user.is_authenticated)
+
+# Calculator route
 @app.route('/calculator', methods=['GET', 'POST'])
+@login_required
 def calculate():
     if request.method == 'POST':
         name = request.form['name']
@@ -75,14 +86,6 @@ def calculate():
         weekly_change = float(request.form['weekly_change'])
         gender = request.form['gender']
         
-        # Reset result variables
-        result_line_1 = None
-        result_line_2 = None
-        result_line_3 = None
-        result_line_4 = None
-        result_line_5 = None
-        result_line_6 = None
-
         # Convert height from feet and inches to inches
         height_inches = (height_ft * 12) + height_in
         
@@ -98,8 +101,16 @@ def calculate():
 
         # Calculate the recommended calorie intake per day to achieve the target weight
         # Adjust the caloric deficit or surplus based on the desired weekly weight change
-        caloric_change_per_day = weekly_change * 500  # Aim for a 500-calorie change per day for each pound of weight change per week
-        target_calories = round(tdee + caloric_change_per_day)
+        if target_weight > weight_lbs:
+            # Target weight is higher, user wants to gain weight
+            weekly_change_abs = abs(weekly_change)  # Ensure weekly change is positive
+            caloric_change_per_day = weekly_change_abs * 500  # Aim for a 500-calorie change per day for each pound of weight change per week
+            target_calories = round(tdee + caloric_change_per_day)
+        else:
+            # Target weight is lower, user wants to lose weight
+            weekly_change_abs = abs(weekly_change)  # Ensure weekly change is positive
+            caloric_change_per_day = weekly_change_abs * 500  # Aim for a 500-calorie change per day for each pound of weight change per week
+            target_calories = round(tdee - caloric_change_per_day)
 
         # Estimate the number of weeks it should take to reach the target weight
         weeks_to_reach_target_weight = round((target_weight - weight_lbs) / weekly_change)
@@ -110,7 +121,7 @@ def calculate():
         result_line_3 = f"3. Target Weight: {target_weight} lbs"
         result_line_4 = f"4. Desired Weekly Weight Change: {weekly_change} lbs"
         result_line_5 = f"5. Recommended Daily Calorie Intake: {target_calories} calories"
-        result_line_6 = f"6. Estimated Time to Reach Target Weight: {weeks_to_reach_target_weight} weeks"
+        result_line_6 = f"6. Estimated Time to Reach Target Weight: {abs(weeks_to_reach_target_weight)} weeks"
 
         # Render the template with result lines
         return render_template('calculator.html', 

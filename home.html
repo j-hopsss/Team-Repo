@@ -3,98 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Wise Bites - Your Nutrition Companion</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
+        /* Additional styling */
         body {
             font-family: Arial, sans-serif;
-            background-color: #fff; /* Dark navy blue background */
-            color: #1a1a2e; /* White text */
             margin: 0;
             padding: 0;
+            background-color: #001b30; /* Dark navy background */
+            color: #fff; /* White text */
         }
         .navbar {
-            background-color: #1a1a2e; /* Dark navy blue bar */
-            padding: 25px 0;
-            text-align: right;
+            background-color: #000c16; /* Slightly darker navy for navbar */
+            color: #fff;
+            padding: 20px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 36px;
+            font-weight: bold;
         }
         .navbar a {
+            color: #fff;
             text-decoration: none;
-            color: #fff; /* White links */
-            margin: 0 20px;
-            transition: color 0.3s ease;
-        }
-        .navbar a:hover {
-            color: #fca311; /* Orange on hover */
+            margin: 0 15px;
+            font-size: 18px;
         }
         .container {
+            padding: 50px 20px;
             max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-        }
-        h1 {
-            color: #1a1a2e; /* Orange text */
-        }
-        p {
-            margin-bottom: 20px;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            margin-bottom: 10px;
-        }
-        a {
-            text-decoration: none;
-            color: #fff; /* White links */
-            padding: 0px 0px;
-            border-radius: 0px;
-            display: inline-block;
-            transition: background-color 0.3s ease;
-        }
-        a:hover {
-            background-color: #3d405b; /* Darker blue on hover */
+            margin: auto;
         }
         .section {
-            margin-top: 40px;
+            margin-bottom: 40px;
         }
         .section h2 {
-            color: #1a1a2e; /* Orange text */
+            color: #fff; /* White section headings */
+            font-size: 24px;
             margin-bottom: 10px;
         }
         .section p {
-            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        .login-signup {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .login-signup a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <a href="/calculator">Calculator</a>
+        <h1>Wise Bites</h1>
         {% if logged_in %}
-            <a href="/logout">Logout</a>
-            <a href="/dashboard">Profile</a>
+            <div>
+                <a href="/logout">Logout</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/calculator">Calculator</a>
+            </div>
         {% else %}
-            <a href="/login">Login</a>
-            <a href="/signup">Sign Up</a>
+            <div>
+                <a href="/login">Login</a>
+                <a href="/signup">Sign Up</a>
+            </div>
         {% endif %}
     </div>
     <div class="container">
-        <h1>Welcome to Wise Bites!</h1>
         <div class="section">
-            <h2>About Us</h2>
-            <p>{Insert appropriate text}</p>
+            <h2>About Wise Bites</h2>
+            <p>Wise Bites is your comprehensive nutrition companion, providing personalized meal plans, food recommendations, and calorie tracking to help you achieve your health and fitness goals.</p>
         </div>
         <div class="section">
-            <h2>What We Do</h2>
-            <p>{Insert appropriate text}</p>
+            <h2>What We Offer</h2>
+            <p>With Wise Bites, you can calculate your daily calorie needs, receive tailored food recommendations based on your preferences and dietary requirements, and effortlessly track your food intake to stay on top of your nutritional goals.</p>
         </div>
         <div class="section">
-            <h2>FAQs</h2>
-            <p>{Insert appropriate text}</p>
+            <h2>How It Works</h2>
+            <p>Our intuitive calorie calculator helps you determine your daily energy requirements, while our extensive database of foods and recipes ensures you always make informed and healthy choices. Simply log your meals and snacks, and let Wise Bites take care of the rest!</p>
         </div>
         <div class="section">
-            <h2>Contact Info for Creators</h2>
-            <p>{Insert appropriate text}</p>
+            <h2>Contact Us</h2>
+            <p>Have questions or feedback? We'd love to hear from you! Reach out to our team at contact@wisebites.com for assistance.</p>
         </div>
     </div>
 </body>
