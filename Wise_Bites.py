@@ -74,6 +74,99 @@ def dashboard():
                             height=height,
                             weight=weight)
 
+@app.route('/mealplans')
+@login_required
+def mealPlans():
+    target_calories = session.get('target_calories')
+    breakfast_calories = int(0.3 * target_calories)
+    lunch_calories = int(0.4 * target_calories)
+    dinner_calories = int(0.3 * target_calories)
+
+    # Define the parameters for the Edamam API request for breakfast
+    breakfast_params = {
+        'q': 'recipe',
+        'app_id': APP_ID,
+        'app_key': APP_KEY,
+        'calories': f"{breakfast_calories}",
+        'mealType': 'breakfast',
+        'from': 0,
+        'to': 1
+    }
+
+    # Make a GET request to the Edamam API for breakfast
+    breakfast_response = requests.get(API_URL, params=breakfast_params)
+
+    # Define the parameters for the Edamam API request for lunch
+    lunch_params = {
+        'q': 'recipe',
+        'app_id': APP_ID,
+        'app_key': APP_KEY,
+        'calories': f"{lunch_calories}",
+        'mealType': 'lunch',
+        'from': 0,
+        'to': 1
+    }
+
+    # Make a GET request to the Edamam API for lunch
+    lunch_response = requests.get(API_URL, params=lunch_params)
+
+    # Define the parameters for the Edamam API request for dinner
+    dinner_params = {
+        'q': 'recipe',
+        'app_id': APP_ID,
+        'app_key': APP_KEY,
+        'calories': f"{dinner_calories}",
+        'mealType': 'dinner',
+        'from': 0,
+        'to': 1
+    }
+
+    # Make a GET request to the Edamam API for dinner
+    dinner_response = requests.get(API_URL, params=dinner_params)
+
+    # Process breakfast response
+    if breakfast_response.status_code == 200:
+        breakfast_data = breakfast_response.json()
+        breakfast_recipes = extract_recipes(breakfast_data)
+    else:
+        breakfast_recipes = []
+
+    # Process lunch response
+    if lunch_response.status_code == 200:
+        lunch_data = lunch_response.json()
+        lunch_recipes = extract_recipes(lunch_data)
+    else:
+        lunch_recipes = []
+
+    # Process dinner response
+    if dinner_response.status_code == 200:
+        dinner_data = dinner_response.json()
+        dinner_recipes = extract_recipes(dinner_data)
+    else:
+        dinner_recipes = []
+
+    return render_template('mealplans.html',
+                           target_calories=target_calories,
+                           breakfast_recipes=breakfast_recipes,
+                           lunch_recipes=lunch_recipes,
+                           dinner_recipes=dinner_recipes)
+
+
+def extract_recipes(data):
+    recipes = []
+    for hit in data.get('hits', []):
+        recipe_data = hit.get('recipe')
+        recipe_info = {
+            'label': recipe_data.get('label'),
+            'image': recipe_data.get('image'),
+            'ingredients': recipe_data.get('ingredientLines'),
+            'total_calories': recipe_data.get('calories')
+        }
+        recipes.append(recipe_info)
+    return recipes
+
+
+# In your dashboard.html template, you can iterate over the recipes and display them
 @app.route('/logout')
 @login_required
 def logout():
@@ -157,112 +250,7 @@ def calculate():
     else:
         return render_template('calculator.html')
     
-def search_recipes(query, calories_from=None, calories_to=None, limit=None):
-    headers = {
-        "app_id": APP_ID,
-        "app_key": APP_KEY,
-    }
-    params = {
-        "q": query,
-    }
-    
-    # Add optional parameters if provided
-    if calories_from is not None:
-        params["calories_from"] = calories_from
-    if calories_to is not None:
-        params["calories_to"] = calories_to
-    if limit is not None:
-        params["limit"] = limit
 
-    response = requests.get(API_URL, params=params, headers=headers)
-
-    if response.status_code == 200:
-        data = response.json()
-        return data
-    else:
-        print("Error:", response.status_code)
-        return None
-
-
-
-def generate_meal_plans(target_calories, meal_type):
-    # Determine caloric distribution (e.g., 30% for breakfast, 40% for lunch, 30% for dinner)
-    if meal_type == 'breakfast':
-        calories_percentage = 0.3
-    elif meal_type == 'lunch':
-        calories_percentage = 0.4
-    elif meal_type == 'dinner':
-        calories_percentage = 0.3
-    else:
-        raise ValueError("Invalid meal type. Must be 'breakfast', 'lunch', or 'dinner'.")
-
-    meal_calories = int(target_calories * calories_percentage)
-
-    # Query the database for recipes within the caloric range for the specified meal
-    meal_recipes = search_recipes(query="", calories_from=meal_calories - 50,
-                                   calories_to=meal_calories + 50,
-                                   limit=1)  # Limit to a reasonable number of options
-    
-    if meal_recipes is None:
-        print("No recipes found for", meal_type)
-        return None
-
-    if len(meal_recipes) == 0:
-        print("No recipes found for", meal_type)
-        return None
-
-    # Select a suitable recipe for the specified meal
-    selected_meal = meal_recipes[0]  # Assuming the first recipe is selected
-    
-    # Prepare the meal data
-    meal_data = {
-        'name': selected_meal.get('name', ''),
-        'image_url': selected_meal.get('image_url', ''),
-        'calories': selected_meal.get('calories', ''),
-        'ingredients': selected_meal.get('ingredients', [])
-    }
-    
-    print("Meal Data for", meal_type, ":", meal_data)
-
-    return meal_data
-
-
-
-
-def select_recipe(recipes, target_calories):
-    # Choose the recipe with the closest caloric value to the target
-    selected_recipe = None
-    min_difference = float('inf')
-
-    for recipe in recipes:
-        calories = recipe['calories']
-        difference = abs(calories - target_calories)
-        if difference < min_difference:
-            min_difference = difference
-            selected_recipe = recipe
-
-    return selected_recipe
-
-@app.route('/mealplans')
-@login_required
-def mealPlan():
-    # Retrieve target calories from session
-    target_calories = session.get('target_calories')
-    
-    # Generate meal plans for each meal type
-    breakfast = generate_meal_plans(target_calories, 'breakfast')
-    lunch = generate_meal_plans(target_calories, 'lunch')
-    dinner = generate_meal_plans(target_calories, 'dinner')
-    
-    # Create a dictionary containing meal data for each meal type
-    data = {
-        'breakfast': breakfast,
-        'lunch': lunch,
-        'dinner': dinner
-    }
-    
-    # Render the mealplans.html template with meal data
-    return render_template('mealplans.html', data=data)
 
 
 
