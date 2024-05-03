@@ -5,17 +5,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Additional styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #001b30; /* Dark navy background */
+            color: #fff; /* White text */
+        }
+        .navbar {
+            background-color: #000c16; /* Slightly darker navy for navbar */
+            color: #fff;
+            padding: 20px 20px; /* Increased padding for thicker bar */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 36px; /* Same font size as home page */
+            font-weight: bold; /* Same font weight as home page */
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px; /* Same font size as home page */
+        }
+        .container {
+            padding: 50px 20px;
+            max-width: 800px;
+            margin: auto;
+        }
+    </style>
 </head>
 <body>
     <div class="navbar">
-        <h1>Welcome to Your Dashboard</h1>
-        <a href="/logout">Logout</a>
+        <h1>Account Dashboard</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/mealplans">Meal Plans</a>
+            <a href="/logout">Logout</a>
+        </div>
     </div>
     <div class="container">
-        <p>You are logged in!</p>
-        <ul>
-            <li><a href="/profile">Profile</a></li>
-        </ul>
+        <!-- My Information Section -->
+        <h2>My Information</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Height</td>
+                    <td>{{ height }}</td>
+                </tr>
+                <tr>
+                    <td>Weight</td>
+                    <td>{{ weight }}</td>
+                </tr>
+                <td>BMR</td>
+                    <td>{{ bmr }}</td>
+                </tr>
+                <tr>
+                    <td>TDEE</td>
+                    <td>{{ tdee }}</td>
+                </tr>
+                <tr>
+                    <td>Target Weight</td>
+                    <td>{{ target_weight }}</td>
+                </tr>
+                <tr>
+                    <td>Weekly Loss</td>
+                    <td>{{ weekly_loss }}</td>
+                </tr>
+                <tr>
+                    <td>Target Calories</td>
+                    <td>{{ target_calories }}</td>
+                </tr>
+                <tr>
+                    <td>Weeks to Reach Target Weight</td>
+                    <td>{{ weeks_to_reach_target_weight }}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>
+    <div class="container">
+        <h2>Log a Meal</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Target Calories</th>
+                    <th>Logged Calories</th>
+                    <th>Remaining Calories</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Monday</td>
+                    <td>{{ target_calories_monday }}</td>
+                    <td><input type="number" name="calories_monday" id="calories_monday"></td>
+                    <td>{{ remaining_calories_monday }}</td>
+                </tr>
+                    <td>Tuesday</td>
+                    <td>{{ target_calories_monday }}</td>
+                    <td><input type="number" name="calories_monday" id="calories_monday"></td>
+                    <td>{{ remaining_calories_monday }}</td>
+                </tr>
+                    <td>Wednesday</td>
+                    <td>{{ target_calories_monday }}</td>
+                    <td><input type="number" name="calories_monday" id="calories_monday"></td>
+                    <td>{{ remaining_calories_monday }}</td>
+                </tr>
+                    <td>Thursday</td>
+                    <td>{{ target_calories_monday }}</td>
+                    <td><input type="number" name="calories_monday" id="calories_monday"></td>
+                    <td>{{ remaining_calories_monday }}</td>
+                </tr>
+                    <td>Friday</td>
+                    <td>{{ target_calories_monday }}</td>
+                    <td><input type="number" name="calories_monday" id="calories_monday"></td>
+                    <td>{{ remaining_calories_monday }}</td>
+                </tr>
+                    <td>Saturday</td>
+                    <td>{{ target_calories_monday }}</td>
+                    <td><input type="number" name="calories_monday" id="calories_monday"></td>
+                    <td>{{ remaining_calories_monday }}</td>
+                </tr>
+                    <td>Sunday</td>
+                    <td>{{ target_calories_monday }}</td>
+                    <td><input type="number" name="calories_monday" id="calories_monday"></td>
+                    <td>{{ remaining_calories_monday }}</td>
+                </tr>
+                <!-- Repeat the above row for each day of the week -->
+            </tbody>
+        </table>
+    </div>
+    </body>
+    </html>
