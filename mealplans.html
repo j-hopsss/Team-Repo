@@ -78,46 +78,70 @@
     <div class="container">
         <h1>Meal Plans</h1>
         
-        <h2>Breakfast</h2>
-        {% if data.breakfast %}
-            <p>Name: {{ data.breakfast.name }}</p>
-            <p>Calories: {{ data.breakfast.calories }}</p>
-            <p>Ingredients:</p>
+        <!-- Display recipes -->
+        <div class="meal">
+            <h2>Breakfast</h2>
             <ul>
-                {% for ingredient in data.breakfast.ingredients %}
-                    <li>{{ ingredient }}</li>
+                {% for recipe in breakfast_recipes %}
+                <li>
+                    <h3>{{ recipe.label }}</h3>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}">
+                    <p>Total Calories: {{ recipe.total_calories }}</p>
+                    <h4>Ingredients:</h4>
+                    <ul>
+                        {% for ingredient in recipe.ingredients %}
+                        <li>{{ ingredient }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
                 {% endfor %}
             </ul>
-        {% else %}
-            <p>No breakfast plan available</p>
-        {% endif %}
-    
-        <h2>Lunch</h2>
-        {% if data.lunch %}
-            <p>Name: {{ data.lunch.name }}</p>
-            <p>Calories: {{ data.lunch.calories }}</p>
-            <p>Ingredients:</p>
+        </div>
+
+        <!-- Display lunch recipes -->
+        <div class="meal">
+            <h2>Lunch</h2>
             <ul>
-                {% for ingredient in data.lunch.ingredients %}
-                    <li>{{ ingredient }}</li>
+                {% for recipe in lunch_recipes %}
+                <li>
+                    <h3>{{ recipe.label }}</h3>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}">
+                    <p>Total Calories: {{ recipe.total_calories }}</p>
+                    <h4>Ingredients:</h4>
+                    <ul>
+                        {% for ingredient in recipe.ingredients %}
+                        <li>{{ ingredient }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
                 {% endfor %}
             </ul>
-        {% else %}
-            <p>No lunch plan available</p>
-        {% endif %}
-    
-        <h2>Dinner</h2>
-        {% if data.dinner %}
-            <p>Name: {{ data.dinner.name }}</p>
-            <p>Calories: {{ data.dinner.calories }}</p>
-            <p>Ingredients:</p>
+        </div>
+
+        <!-- Display dinner recipes -->
+        <div class="meal">
+            <h2>Dinner</h2>
             <ul>
-                {% for ingredient in data.dinner.ingredients %}
-                    <li>{{ ingredient }}</li>
+                {% for recipe in dinner_recipes %}
+                <li>
+                    <h3>{{ recipe.label }}</h3>
+                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}">
+                    <p>Total Calories: {{ recipe.total_calories }}</p>
+                    <h4>Ingredients:</h4>
+                    <ul>
+                        {% for ingredient in recipe.ingredients %}
+                        <li>{{ ingredient }}</li>
+                        {% endfor %}
+                    </ul>
+                </li>
                 {% endfor %}
             </ul>
-        {% else %}
-            <p>No dinner plan available</p>
-        {% endif %}
-    </body>
-    </html>
+        </div>
+
+        <!-- Add more information or functionality as needed -->
+
+        <!-- Logout link -->
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</body>
+</html>
