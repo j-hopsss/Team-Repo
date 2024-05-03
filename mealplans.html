@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meal Plans</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a2e;
+        }
+        .navbar {
+            background-color: #000c16; /* Slightly darker navy for navbar */
+            color: #fff;
+            padding: 20px 20px; /* Increased padding for thicker bar */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 36px; /* Same font size as home page */
+            font-weight: bold; /* Same font weight as home page */
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 18px; /* Same font size as home page */
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .meal {
+            margin-bottom: 30px;
+        }
+        .meal h2 {
+            color: #62dafc;
+        }
+        .meal img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .meal-details {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+        }
+        .meal-details p {
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h1>Meal Plans</h1>
+        <div>
+            <a href="/">Home</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Meal Plans</h1>
+        
+        <h2>Breakfast</h2>
+        {% if data.breakfast %}
+            <p>Name: {{ data.breakfast.name }}</p>
+            <p>Calories: {{ data.breakfast.calories }}</p>
+            <p>Ingredients:</p>
+            <ul>
+                {% for ingredient in data.breakfast.ingredients %}
+                    <li>{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No breakfast plan available</p>
+        {% endif %}
+    
+        <h2>Lunch</h2>
+        {% if data.lunch %}
+            <p>Name: {{ data.lunch.name }}</p>
+            <p>Calories: {{ data.lunch.calories }}</p>
+            <p>Ingredients:</p>
+            <ul>
+                {% for ingredient in data.lunch.ingredients %}
+                    <li>{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No lunch plan available</p>
+        {% endif %}
+    
+        <h2>Dinner</h2>
+        {% if data.dinner %}
+            <p>Name: {{ data.dinner.name }}</p>
+            <p>Calories: {{ data.dinner.calories }}</p>
+            <p>Ingredients:</p>
+            <ul>
+                {% for ingredient in data.dinner.ingredients %}
+                    <li>{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No dinner plan available</p>
+        {% endif %}
+    </body>
+    </html>
