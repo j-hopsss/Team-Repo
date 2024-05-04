@@ -74,6 +74,8 @@ def dashboard():
                             height=height,
                             weight=weight)
 
+
+
 @app.route('/mealplans')
 @login_required
 def mealPlans():
@@ -117,8 +119,8 @@ def mealPlans():
         'app_key': APP_KEY,
         'calories': f"{dinner_calories}",
         'mealType': 'dinner',
-        'from': 0,
-        'to': 1
+        'from': 2,
+        'to': 3
     }
 
     # Make a GET request to the Edamam API for dinner
@@ -160,7 +162,7 @@ def extract_recipes(data):
             'label': recipe_data.get('label'),
             'image': recipe_data.get('image'),
             'ingredients': recipe_data.get('ingredientLines'),
-            'total_calories': recipe_data.get('calories')
+            'total_calories': round(recipe_data.get('calories'))
         }
         recipes.append(recipe_info)
     return recipes
