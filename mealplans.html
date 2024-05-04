@@ -85,7 +85,7 @@
                 {% for recipe in breakfast_recipes %}
                 <li>
                     <h3>{{ recipe.label }}</h3>
-                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}">
+                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}" style="max-width: 300px; max-height: 200px;">
                     <p>Total Calories: {{ recipe.total_calories }}</p>
                     <h4>Ingredients:</h4>
                     <ul>
@@ -105,7 +105,7 @@
                 {% for recipe in lunch_recipes %}
                 <li>
                     <h3>{{ recipe.label }}</h3>
-                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}">
+                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}" style="max-width: 300px; max-height: 200px;">
                     <p>Total Calories: {{ recipe.total_calories }}</p>
                     <h4>Ingredients:</h4>
                     <ul>
@@ -125,7 +125,7 @@
                 {% for recipe in dinner_recipes %}
                 <li>
                     <h3>{{ recipe.label }}</h3>
-                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}">
+                    <img src="{{ recipe.image }}" alt="{{ recipe.label }}" style="max-width: 300px; max-height: 200px;">
                     <p>Total Calories: {{ recipe.total_calories }}</p>
                     <h4>Ingredients:</h4>
                     <ul>
