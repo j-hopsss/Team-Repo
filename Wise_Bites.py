@@ -1,5 +1,5 @@
 # app.py
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin, current_user
 import requests
 
@@ -73,6 +73,17 @@ def dashboard():
                             weeks_to_reach_target_weight=weeks_to_reach_target_weight,
                             height=height,
                             weight=weight)
+
+@app.route('/update_calories/<day>', methods=['POST'])
+def update_calories(day):
+    consumed = request.json['consumed']
+    target_calories = session.get('target_calories', 2000)
+    remaining_key = f'remaining_calories_{day}'
+    remaining_calories = session.get(remaining_key, target_calories)
+    remaining_calories -= consumed
+    session[remaining_key] = remaining_calories
+    return jsonify({'remaining_calories': remaining_calories})
+
 
 
 
