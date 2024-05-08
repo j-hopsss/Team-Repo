@@ -74,15 +74,19 @@ def dashboard():
                             height=height,
                             weight=weight)
 
+
 @app.route('/update_calories/<day>', methods=['POST'])
 def update_calories(day):
     consumed = request.json['consumed']
-    target_calories = session.get('target_calories', 2000)
-    remaining_key = f'remaining_calories_{day}'
-    remaining_calories = session.get(remaining_key, target_calories)
-    remaining_calories -= consumed
-    session[remaining_key] = remaining_calories
-    return jsonify({'remaining_calories': remaining_calories})
+    if consumed == 0:
+        session['remaining_calories_' + day] = session['target_calories']
+    else:
+        target_calories = session.get('target_calories', 2000)
+        remaining_key = f'remaining_calories_{day}'
+        remaining_calories = session.get(remaining_key, target_calories)
+        remaining_calories -= consumed
+        session[remaining_key] = remaining_calories
+    return jsonify({'remaining_calories': session.get('remaining_calories_' + day, session.get('target_calories'))})
 
 
 
@@ -237,9 +241,9 @@ def calculate():
         session['bmr'] = bmr
         session['tdee'] = tdee
         session['target_weight'] = target_weight
-        session['weekly_loss'] = weekly_loss
+        session['weekly_loss'] = abs(weekly_loss)
         session['target_calories'] = target_calories
-        session['weeks_to_reach_target_weight'] = weeks_to_reach_target_weight
+        session['weeks_to_reach_target_weight'] = abs(weeks_to_reach_target_weight)
         session['height'] = str(height_ft) + "'" + str(height_in) + "''"
         session['weight'] = str(weight_lbs)
 
@@ -247,9 +251,9 @@ def calculate():
         result_line_1 = f"1. Estimated BMR (Basal Metabolic Rate): {bmr} calories/day"
         result_line_2 = f"2. Estimated TDEE (Total Daily Energy Expenditure): {tdee} calories/day"
         result_line_3 = f"3. Target Weight: {target_weight} lbs"
-        result_line_4 = f"4. Weekly Weight Loss Goal: {weekly_loss} lbs"
+        result_line_4 = f"4. Weekly Weight Change Goal: {abs(weekly_loss)} lbs"
         result_line_5 = f"5. Recommended Daily Calorie Intake: {target_calories} calories"
-        result_line_6 = f"6. Estimated Time to Reach Target Weight: {weeks_to_reach_target_weight} weeks"
+        result_line_6 = f"6. Estimated Time to Reach Target Weight: {abs(weeks_to_reach_target_weight)} weeks"
 
         # Render the template with result lines
         return render_template('calculator.html', 
