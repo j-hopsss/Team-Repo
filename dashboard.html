@@ -39,6 +39,26 @@
             margin: auto;
         }
     </style>
+    <script>
+        function updateCalories(event, day) {
+            // Check if Enter key is pressed, Enter key has keyCode 13
+            if (event.keyCode === 13) {
+                const caloriesConsumed = parseInt(document.getElementById('calories_' + day).value) || 0;
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', '/update_calories/' + day, true);
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                xhr.onreadystatechange = function() {
+                    if (this.readyState === 4 && this.status === 200) {
+                        const response = JSON.parse(this.responseText);
+                        document.getElementById('remaining_calories_' + day).innerText = response.remaining_calories;
+                        // Clear the input after submission
+                        document.getElementById('calories_' + day).value = '';
+                    }
+                };
+                xhr.send(JSON.stringify({consumed: caloriesConsumed}));
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="navbar">
@@ -68,7 +88,8 @@
                     <td>Weight</td>
                     <td>{{ weight }}</td>
                 </tr>
-                <td>BMR</td>
+                <tr>
+                    <td>BMR</td>
                     <td>{{ bmr }}</td>
                 </tr>
                 <tr>
@@ -93,10 +114,6 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-</body>
-</html>
-    <div class="container">
         <h2>Log a Meal</h2>
         <table>
             <thead>
@@ -110,42 +127,48 @@
             <tbody>
                 <tr>
                     <td>Monday</td>
-                    <td>{{ target_calories_monday }}</td>
-                    <td><input type="number" name="calories_monday" id="calories_monday"></td>
-                    <td>{{ remaining_calories_monday }}</td>
+                    <td>{{ target_calories }}</td>
+                    <td><input type="number" name="calories_monday" id="calories_monday" onkeypress="updateCalories(event, 'monday')"></td>
+                    <td id="remaining_calories_monday">{{ session.get('remaining_calories_monday', target_calories) }}</td>
                 </tr>
+                <tr>
                     <td>Tuesday</td>
                     <td>{{ target_calories }}</td>
-                    <td><input type="number" name="calories_tuesday" id="calories_tuesday"></td>
-                    <td>{{ remaining_calories_tuesday }}</td>
+                    <td><input type="number" name="calories_tuesday" id="calories_tuesday" onkeypress="updateCalories(event, 'tuesday')"></td>
+                    <td id="remaining_calories_tuesday">{{ session.get('remaining_calories_tuesday', target_calories) }}</td>
                 </tr>
+                <tr>
                     <td>Wednesday</td>
                     <td>{{ target_calories }}</td>
-                    <td><input type="number" name="calories_wednesday" id="calories_wednesday"></td>
-                    <td>{{ remaining_calories_wednesday }}</td>
+                    <td><input type="number" name="calories_wednesday" id="calories_wednesday" onkeypress="updateCalories(event, 'wednesday')"></td>
+                    <td id="remaining_calories_wednesday">{{ session.get('remaining_calories_wednesday', target_calories) }}</td>
                 </tr>
+                <tr>
                     <td>Thursday</td>
                     <td>{{ target_calories }}</td>
-                    <td><input type="number" name="calories_thursday" id="calories_thursday"></td>
-                    <td>{{ remaining_calories_thursday }}</td>
+                    <td><input type="number" name="calories_thursday" id="calories_thursday" onkeypress="updateCalories(event, 'thursday')"></td>
+                    <td id="remaining_calories_thursday">{{ session.get('remaining_calories_thursday', target_calories) }}</td>
                 </tr>
+                <tr>
                     <td>Friday</td>
                     <td>{{ target_calories }}</td>
-                    <td><input type="number" name="calories_friday" id="calories_friday"></td>
-                    <td>{{ remaining_calories_friday }}</td>
+                    <td><input type="number" name="calories_friday" id="calories_friday" onkeypress="updateCalories(event, 'friday')"></td>
+                    <td id="remaining_calories_friday">{{ session.get('remaining_calories_friday', target_calories) }}</td>
                 </tr>
+                <tr>
                     <td>Saturday</td>
                     <td>{{ target_calories }}</td>
-                    <td><input type="number" name="calories_saturday" id="calories_saturday"></td>
-                    <td>{{ remaining_calories_saturday }}</td>
+                    <td><input type="number" name="calories_saturday" id="calories_saturday" onkeypress="updateCalories(event, 'saturday')"></td>
+                    <td id="remaining_calories_saturday">{{ session.get('remaining_calories_saturday', target_calories) }}</td>
                 </tr>
+                <tr>
                     <td>Sunday</td>
                     <td>{{ target_calories }}</td>
-                    <td><input type="number" name="calories_sunday" id="calories_sunday"></td>
-                    <td>{{ remaining_calories_sunday }}</td>
+                    <td><input type="number" name="calories_sunday" id="calories_sunday" onkeypress="updateCalories(event, 'sunday')"></td>
+                    <td id="remaining_calories_sunday">{{ session.get('remaining_calories_sunday', target_calories) }}</td>
                 </tr>
             </tbody>
         </table>
     </div>
-    </body>
-    </html>
+</body>
+</html>
