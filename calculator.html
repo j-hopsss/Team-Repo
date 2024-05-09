@@ -114,11 +114,10 @@
                 
                 <label for="target_weight">Target Weight (lbs):</label>
                 <input type="number" id="target_weight" name="target_weight" required value="{{ request.form.get('target_weight', '') }}">
-                
-                <label for="weekly_loss">Desired Weekly Weight Change (lbs):<p>
-                </p>(For weight loss, enter positive number. For weight gain, enter negative number)</label>
-                <input type="number" id="weekly_los" name="weekly_loss" required value="{{ request.form.get('weekly_loss', '') }}">
-                
+
+                <label for="weekly_loss">Desired Weekly Weight Change (lbs):</label>
+                <input type="number" id="weekly_loss" name="weekly_loss" required value="{{ request.form.get('weekly_loss', '') }}">
+
                 <label for="gender">Gender:</label>
                 <select id="gender" name="gender" required>
                     <option value="M" {% if request.form.get('gender') == 'M' %} selected {% endif %}>Male</option>
